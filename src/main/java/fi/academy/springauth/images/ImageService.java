@@ -1,5 +1,6 @@
 package fi.academy.springauth.images;
 
+import fi.academy.springauth.appUser.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -21,9 +22,10 @@ public class ImageService {
     private final ResourceLoader resourceLoader;
 
     @Autowired
-    public ImageService(ImageRepository imageRepository, ResourceLoader resourceLoader) {
+    public ImageService(ImageRepository imageRepository, ResourceLoader resourceLoader, AppUserRepository appUserRepository) {
         this.imageRepository = imageRepository;
         this.resourceLoader = resourceLoader;
+
     }
 
     public ImageEntity createImage(MultipartFile file) throws IOException {

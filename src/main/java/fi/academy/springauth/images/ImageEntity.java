@@ -14,15 +14,11 @@ public class ImageEntity {
     private String url;
 //    @OneToOne(mappedBy = "image")
 //    @JsonIgnoreProperties("image")
-//    private ContentEntity content;
-
-    public ImageEntity(String url, ContentEntity content) {
-        this.url = url;
-
-    }
+//    private PhotoshootPlanEntity photoshoot;
 
     public ImageEntity(String url) {
         this.url = url;
+
     }
 
     public ImageEntity() {
