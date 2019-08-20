@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table()
@@ -95,4 +96,20 @@ public class AppUserEntity {
         this.plans = plans;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AppUserEntity)) return false;
+        AppUserEntity that = (AppUserEntity) o;
+        return getId() == that.getId() &&
+                Objects.equals(getEmail(), that.getEmail()) &&
+                Objects.equals(getUsername(), that.getUsername()) &&
+                Objects.equals(getPassword(), that.getPassword()) &&
+                Objects.equals(getPlans(), that.getPlans());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getEmail(), getUsername(), getPassword(), getPlans());
+    }
 }

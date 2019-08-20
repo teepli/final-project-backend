@@ -5,6 +5,7 @@ import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.images.ImageEntity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class PhotoshootPlanEntity {
@@ -13,19 +14,19 @@ public class PhotoshootPlanEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String header;
+    private Date date;
+    private String location;
+    private String description;
+    private String notes;
+    private String referencepictures;
+
     @ManyToOne
     @JoinColumn(name = "app_user_entity_id")
     @JsonIgnoreProperties("plans")
     private AppUserEntity creator;
 
-    private String plan;
-
     public PhotoshootPlanEntity() {
-    }
-
-    public PhotoshootPlanEntity(AppUserEntity creator, String plan) {
-        this.creator = creator;
-        this.plan = plan;
     }
 
     public long getId() {
@@ -44,11 +45,51 @@ public class PhotoshootPlanEntity {
         this.creator = creator;
     }
 
-    public String getPlan() {
-        return plan;
+    public String getHeader() {
+        return header;
     }
 
-    public void setPlan(String plan) {
-        this.plan = plan;
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getReferencepictures() {
+        return referencepictures;
+    }
+
+    public void setReferencepictures(String referencepictures) {
+        this.referencepictures = referencepictures;
     }
 }

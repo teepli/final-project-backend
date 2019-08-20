@@ -32,7 +32,7 @@ public class ImageController {
     PhotoshootPlanRepository photoshootPlanRepository;
 
 
-    @PostMapping("/{id}")
+   /* @PostMapping("/{id}")
     @Transactional
     public ResponseEntity<?> addImage(@RequestBody MultipartFile image, @PathVariable long id, Principal user) throws IOException {
         Optional<PhotoshootPlanEntity> PLE = photoshootPlanRepository.findById(id);
@@ -51,6 +51,6 @@ public class ImageController {
                 .buildAndExpand(newImage.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
-    }
+    }*/
 
 }
