@@ -4,6 +4,7 @@ package fi.academy.springauth.security.auth;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fi.academy.springauth.appUser.AppUserEntity;
+import fi.academy.springauth.appUser.AppUserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,7 @@ import static fi.academy.springauth.security.auth.SecurityConstants.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-
+    private AppUserRepository appUserRepository;
     private AuthenticationManager authenticationManager;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {

@@ -1,52 +1,51 @@
 package fi.academy.springauth.appUser;
 
-import fi.academy.springauth.appUser.friend.FriendEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class AppUserController {
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    
     @Autowired
     private AppUserRepository appUserRepository;
-
-
-    public AppUserController(AppUserRepository appUserRepository,
-                          BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.appUserRepository = appUserRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    @Autowired
+    private AppUserService appUserService;
 
     @GetMapping("")
-    public Iterable<AppUserEntity> getUsers() {
-        return appUserRepository.findAll();
+    public Optional<AppUserEntity> getUser(Principal user) {
+        return appUserRepository.findByUsername(user.getName());
+    }
+
+    // TODO: custom exception
+    @GetMapping("/{id}")
+    public AppUserEntity getOneUser(Principal user) {
+        return appUserService.getFriendUser(user);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editOwnDetails(@PathVariable long id,
+                                            @RequestBody AppUserEntity appUser,
+                                            Principal user) {
+
+        return appUserService.editDetails(id, appUser, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable long id, Principal user) {
+        return appUserService.deleteUser(id, user);
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody AppUserEntity user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        appUserRepository.save(user);
+    public ResponseEntity<?> signUp(@RequestBody AppUserEntity user) {
+        return appUserService.signUp(user);
     }
 
-//    @GetMapping("/friendtest")
-//    public void friendTest() {
-//        AppUserEntity user = appUserRepository.findByUsername("dd");
-//        AppUserEntity usertest2 = appUserRepository.findByUsername("ddd");
-//        FriendEntity user1 = new FriendEntity();
-//        user1.setFriendWith(appUserRepository.findByUsername("ddd"));
-//        user1.setFriend(user);
-//        user.getFriends().add(user1);
-//        appUserRepository.save(user);
-//
-//        FriendEntity test2 = new FriendEntity();
-//        test2.setFriendWith(user);
-//        test2.setFriend(usertest2);
-//        usertest2.getFriends().add(test2);
-//        appUserRepository.save(usertest2);
-//    }
 
 }

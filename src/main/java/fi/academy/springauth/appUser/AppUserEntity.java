@@ -6,18 +6,26 @@ import fi.academy.springauth.content.ContentEntity;
 import fi.academy.springauth.photoShoot.PhotoshootPlanEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
+@Table()
 public class AppUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String name;
+    @NotBlank
+    @Email
+    private String email;
+
+    @NotBlank
     private String username;
 
+    @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -37,11 +45,14 @@ public class AppUserEntity {
     public AppUserEntity() {
     }
 
-    public AppUserEntity(String name, String username, String password, List<PhotoshootPlanEntity> plans) {
-        this.name = name;
+    public AppUserEntity(@NotBlank @Email String email, String username, @NotBlank String password) {
+        this.email = email;
         this.username = username;
         this.password = password;
-        this.plans = plans;
+    }
+
+    public AppUserEntity(long id) {
+        this.id = id;
     }
 
     public long getId() {
@@ -52,12 +63,12 @@ public class AppUserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {
@@ -83,4 +94,5 @@ public class AppUserEntity {
     public void setPlans(List<PhotoshootPlanEntity> plans) {
         this.plans = plans;
     }
+
 }
