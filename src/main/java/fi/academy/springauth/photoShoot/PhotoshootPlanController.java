@@ -39,6 +39,11 @@ public class PhotoshootPlanController {
         return photoshootPlanRepository.findByCreator(appuser);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findOnebyId(@PathVariable long id, Principal user){
+        return photoshootPlanService.findOneById(id, user);
+    }
+
     /**
      * Luo uuden suunnitelman
      * Hakee kirjautuneen käyttäjän Principalin avulla ja asettaa käyttäjän suunnitelman luojaksi.
