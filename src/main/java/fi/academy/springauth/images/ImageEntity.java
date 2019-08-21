@@ -2,6 +2,7 @@ package fi.academy.springauth.images;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fi.academy.springauth.content.ContentEntity;
+import fi.academy.springauth.photoShoot.PhotoshootPlanEntity;
 
 import javax.persistence.*;
 
@@ -12,9 +13,11 @@ public class ImageEntity {
     private Long id;
 
     private String url;
-//    @OneToOne(mappedBy = "image")
-//    @JsonIgnoreProperties("image")
-//    private PhotoshootPlanEntity photoshoot;
+
+    @ManyToOne
+    @JoinColumn(name="image_entity_id")
+    @JsonIgnoreProperties("referencePictures")
+    private PhotoshootPlanEntity photoshoot;
 
     public ImageEntity(String url) {
         this.url = url;
@@ -39,5 +42,13 @@ public class ImageEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public PhotoshootPlanEntity getPhotoshoot() {
+        return photoshoot;
+    }
+
+    public void setPhotoshoot(PhotoshootPlanEntity photoshoot) {
+        this.photoshoot = photoshoot;
     }
 }

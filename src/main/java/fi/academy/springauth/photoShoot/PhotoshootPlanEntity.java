@@ -6,6 +6,7 @@ import fi.academy.springauth.images.ImageEntity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class PhotoshootPlanEntity {
@@ -19,7 +20,11 @@ public class PhotoshootPlanEntity {
     private String location;
     private String description;
     private String notes;
-    private String referencepictures;
+    private String participants;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "photoshoot")
+    @JsonIgnoreProperties("photoshoot")
+    private List<ImageEntity> referencePictures;
 
     @ManyToOne
     @JoinColumn(name = "app_user_entity_id")
@@ -85,11 +90,15 @@ public class PhotoshootPlanEntity {
         this.notes = notes;
     }
 
-    public String getReferencepictures() {
-        return referencepictures;
-    }
+    public String getParticipants() {
+        return participants; }
 
-    public void setReferencepictures(String referencepictures) {
-        this.referencepictures = referencepictures;
-    }
+    public void setParticipants(String participants) {
+        this.participants = participants; }
+
+    public List<ImageEntity> getReferencePictures() {
+        return referencePictures; }
+
+    public void setReferencePictures(List<ImageEntity> referencePicture) {
+        this.referencePictures = referencePicture; }
 }
