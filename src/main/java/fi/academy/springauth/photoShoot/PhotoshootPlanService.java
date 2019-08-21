@@ -43,15 +43,27 @@ public class PhotoshootPlanService {
      * annetulla id:llä. Palauttaa muokatun suunnitelman ja OK statuksen mikäli muokkaus on sallittu.
      */
     public ResponseEntity<?> editPlan(long id, @RequestBody PhotoshootPlanEntity plan, Principal user) {
-        Optional<PhotoshootPlanEntity> myplan = photoshootPlanRepository.findById(id);
+        Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
         Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
-        if (myplan.get().getCreator().getUsername().equals(user.getName())){
-            AppUserEntity creator = myplan.get().getCreator();
+        if (currentPlan.get().getCreator().getUsername().equals(user.getName())){
+            AppUserEntity creator = currentPlan.get().getCreator();
             plan.setId(id);
             plan.setCreator(creator);
             photoshootPlanRepository.save(plan);
             return new ResponseEntity<>(plan, HttpStatus.OK);
         }
         return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<?> findOneById(long id, Principal user){
+        Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
+        if (!currentPlan.isPresent()){
+            return new ResponseEntity<>("Virhe: annetulla id:llä ei löytynyt suunnitelmaa", HttpStatus.NOT_FOUND);
+        }
+        if (currentPlan.get().getCreator().getUsername().equals(user.getName())){
+            return  new ResponseEntity<>(currentPlan.get(), HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
