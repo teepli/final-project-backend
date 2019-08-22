@@ -2,12 +2,9 @@ package fi.academy.springauth.photoShoot;
 
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.appUser.AppUserRepository;
-import fi.academy.springauth.images.ImageEntity;
 import fi.academy.springauth.images.ImageRepository;
 import fi.academy.springauth.images.ImageService;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,19 +25,9 @@ public class PhotoshootPlanController {
     private PhotoshootPlanRepository photoshootPlanRepository;
     @Autowired
     private PhotoshootPlanService photoshootPlanService;
-    @Autowired
-    private ImageService imageService;
-    @Autowired
-    private ImageRepository imageRepository;
-
-    /*@GetMapping("")
-    public List<PhotoshootPlanEntity> getAllPlan() {
-        return photoshootPlanRepository.findAll();
-    }*/
 
     /**
-     * Hakee kaikki kirjautuneena olevan käyttäjän luomat suunnitelmat.
-     * Kirjautuneena oleva käyttäjä saadaan Principalin avulla, palautetaan ko käyttäjän suunnitelmalista
+     * Metodien toteutus PhotoshootPlanServicessa.
      */
     @GetMapping("")
     public List<PhotoshootPlanEntity> findbyCreator(Principal user){
@@ -53,14 +40,9 @@ public class PhotoshootPlanController {
         return photoshootPlanService.findOneById(id, user);
     }
 
-    /**
-     * Luo uuden suunnitelman
-     * Hakee kirjautuneen käyttäjän Principalin avulla ja asettaa käyttäjän suunnitelman luojaksi.
-     * Tallentaa kuvan tietokantaan sekä yhdistää kuvan ja suunitelman toisiinsa. Kuvia varten oltava kansio c:/kuvat
-     */
     @PostMapping("")
     @Transactional
-    public void createPlan (@RequestParam (required = false) String header,
+    public ResponseEntity<?> createPlan (@RequestParam (required = false) String header,
                             @RequestParam (required = false) Date date,
                             @RequestParam (required = false) String location,
                             @RequestParam (required = false) String description,
@@ -68,76 +50,23 @@ public class PhotoshootPlanController {
                             @RequestParam (required = false) String participants,
                             @RequestParam(required = false) MultipartFile image,
                             Principal user)throws IOException {
-        Optional<AppUserEntity> appuser = appUserRepository.findByUsername(user.getName());
-        PhotoshootPlanEntity plan = new PhotoshootPlanEntity();
-        plan.setHeader(header);
-        plan.setDate(date);
-        plan.setLocation(location);
-        plan.setDescription(description);
-        plan.setNotes(notes);
-        plan.setParticipants(participants);
-        plan.setCreator(appuser.get());
-        if(image != null){
-            ImageEntity i = imageService.createImage(image);
-            i.setPhotoshoot(plan);
-            //plan.getReferencePictures().add(i);
-        }
-        photoshootPlanRepository.save(plan);
-
-
+        return photoshootPlanService.createPlan(header, date, location, description, notes, participants, image, user);
     }
+
     @PutMapping("/{id}/pictures")
     public ResponseEntity<?> addPictures(@PathVariable long id, @RequestParam(required = false) MultipartFile image1,
                                          @RequestParam(required = false) MultipartFile image2,
                                          @RequestParam(required = false) MultipartFile image3,
                                          @RequestParam(required = false) MultipartFile image4,
                                          @RequestParam(required = false) MultipartFile image5, Principal user) throws IOException {
-        Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
-        Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
-        if (currentPlan.get().getId() == id){
-        PhotoshootPlanEntity plan = currentPlan.get();
-            if (currentPlan.get().getCreator().getUsername().equals(user.getName())) {
-                AppUserEntity creator = currentPlan.get().getCreator();
-                plan.setId(id);
-                plan.setCreator(creator);
-                if(image1 != null){
-                    ImageEntity a = imageService.createImage(image1);
-                    a.setPhotoshoot(plan);
-                }
-                if(image2 != null){
-                    ImageEntity b = imageService.createImage(image2);
-                    b.setPhotoshoot(plan);
-                }
-                if(image3 != null){
-                    ImageEntity c = imageService.createImage(image3);
-                    c.setPhotoshoot(plan);
-                }
-                if(image4 != null){
-                    ImageEntity d = imageService.createImage(image4);
-                    d.setPhotoshoot(plan);
-                }
-                if(image5 != null){
-                    ImageEntity e = imageService.createImage(image5);
-                    e.setPhotoshoot(plan);
-                }
-                photoshootPlanRepository.save(plan); //tämä tarvitaan, jotta aimmin postatut kuvat säilyvät suunnitelmassa
-                return new ResponseEntity<>(plan, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
+        return photoshootPlanService.addPictures(id, image1, image2, image3, image4, image5, user);
     }
 
-
-    /**
-     * Poistaa suunnitelman. Ks PhotoshootPlanService.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePlan(@PathVariable long id, Principal user) {
         return photoshootPlanService.deletePlan(id, user);
     }
-    /**
-     * Muokkaa luotua suunnitelmaa. Ks PhotoshootPlanService.
-     */
+
     @PutMapping("/{id}")
     public ResponseEntity<?> editPlan(@PathVariable long id, @RequestBody PhotoshootPlanEntity plan, Principal user) {
         return photoshootPlanService.editPlan(id, plan, user);
