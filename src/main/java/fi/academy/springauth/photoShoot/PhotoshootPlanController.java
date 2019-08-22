@@ -87,7 +87,6 @@ public class PhotoshootPlanController {
 
     }
     @PutMapping("/{id}/pictures")
-
     public ResponseEntity<?> addPictures(@PathVariable long id, @RequestParam(required = false) MultipartFile image1,
                                          @RequestParam(required = false) MultipartFile image2,
                                          @RequestParam(required = false) MultipartFile image3,
@@ -121,7 +120,7 @@ public class PhotoshootPlanController {
                     ImageEntity e = imageService.createImage(image5);
                     e.setPhotoshoot(plan);
                 }
-                photoshootPlanRepository.save(plan);
+                photoshootPlanRepository.save(plan); //tämä tarvitaan, jotta aimmin postatut kuvat säilyvät suunnitelmassa
                 return new ResponseEntity<>(plan, HttpStatus.OK);
             }
         }

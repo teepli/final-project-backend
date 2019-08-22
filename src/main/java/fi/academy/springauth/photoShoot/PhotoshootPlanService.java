@@ -44,7 +44,7 @@ public class PhotoshootPlanService {
      */
     public ResponseEntity<?> editPlan(long id, @RequestBody PhotoshootPlanEntity plan, Principal user) {
         Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
-        Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
+       // Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
         if (currentPlan.get().getCreator().getUsername().equals(user.getName())){
             AppUserEntity creator = currentPlan.get().getCreator();
             plan.setId(id);

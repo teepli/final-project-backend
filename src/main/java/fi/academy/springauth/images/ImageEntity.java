@@ -15,7 +15,7 @@ public class ImageEntity {
     private String url;
 
     @ManyToOne
-    @JoinColumn(name="image_entity_id")
+    @JoinColumn(name="photoshoot_plan_entity_id")
     @JsonIgnoreProperties("referencePictures")
     private PhotoshootPlanEntity photoshoot;
 
