@@ -53,4 +53,9 @@ public class ImageController {
         return ResponseEntity.created(location).build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteImage(@PathVariable long id, Principal user) {
+        return imageService.deleteImage(id, user);
+    }
+
 }
