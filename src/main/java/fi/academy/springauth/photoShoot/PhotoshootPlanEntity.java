@@ -5,6 +5,7 @@ import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.images.ImageEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class PhotoshootPlanEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "photoshoot")
     @JsonIgnoreProperties("photoshoot")
-    private List<ImageEntity> referencePictures;
+    private List<ImageEntity> referencePictures = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "app_user_entity_id")

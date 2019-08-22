@@ -77,11 +77,36 @@ public class PhotoshootPlanController {
         plan.setNotes(notes);
         plan.setParticipants(participants);
         plan.setCreator(appuser.get());
+        if(image != null){
+            ImageEntity i = imageService.createImage(image);
+            i.setPhotoshoot(plan);
+            //plan.getReferencePictures().add(i);
+        }
         photoshootPlanRepository.save(plan);
-        ImageEntity i = imageService.createImage(image);
-        i.setPhotoshoot(plan);
-        imageRepository.save(i);
+
+
     }
+    /*@PutMapping("/{id}/pictures")
+
+    public ResponseEntity<?> addPictures(@PathVariable long id, @RequestParam(required = false) MultipartFile image,
+                                         @RequestParam(required = false) MultipartFile image2,
+                                         @RequestParam(required = false) MultipartFile image3,
+                                         @RequestParam(required = false) MultipartFile image4,
+                                         @RequestParam(required = false) MultipartFile image5, Principal user){
+        Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
+        Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
+        if (currentPlan.get().getId() == id){
+        PhotoshootPlanEntity plan = currentPlan.get();
+            if (currentPlan.get().getCreator().getUsername().equals(user.getName())) {
+                AppUserEntity creator = currentPlan.get().getCreator();
+                plan.setId(id);
+                plan.setCreator(creator);
+                photoshootPlanRepository.save(plan);
+                return new ResponseEntity<>(plan, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
+    }*/
 
 
     /**
