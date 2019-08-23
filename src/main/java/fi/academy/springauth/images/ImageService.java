@@ -53,8 +53,10 @@ public class ImageService {
 
     public ResponseEntity<?> deleteImage(long id, Principal user) {
         Optional<ImageEntity> currentImage = Optional.ofNullable(imageRepository.findById(id));
-        if (!currentImage.isPresent()) {
-            return new ResponseEntity<>("Virhe: annetulla id:llä ei löytynyt suunnitelmaa", HttpStatus.NOT_FOUND);
+
+        if (!currentImage.isPresent()){
+            return new ResponseEntity<>("Error: there is no picture with chosen id", HttpStatus.NOT_FOUND);
+
         }
         if (currentImage.get().getPhotoshoot().getCreator().getUsername().equals(user.getName())) {
             imageRepository.delete(currentImage.get());

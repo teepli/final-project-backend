@@ -31,37 +31,25 @@ public class MetadataService {
         try {
             ExifReader ex = new ExifReader();
             Metadata metadata = ImageMetadataReader.readMetadata(image);
-//            Metadata metadata = JpegMetadataReader.readMetadata(image);
-//            Metadata metadata = JpegMetadataReader.readMetadata(image);
-            for (Directory directory : metadata.getDirectories()) {
-                List<MetadataEntity> exif = new ArrayList<>();
-                List<String> exifSub = new ArrayList<>();
-                        List<String> metadataset = new ArrayList<>();
 
-                System.out.println("DIRDIR");
-                System.out.println(directory);
-                //
+            for (Directory directory : metadata.getDirectories()) {
+
                 if (directory.getName().contains("Exif")) {
                     for (Tag tag : directory.getTags()) {
 
                         MetadataEntity me = new MetadataEntity();
-                        me.setMetadata(tag.getTagName() + ":" + tag.getDescription());
+                        me.setMetadata(tag.getTagName() + " : " + tag.getDescription());
                         me.setImage(file);
-                        System.out.println(me.getMetadata());
+
                         metadataRepository.save(me);
-                        imageRepository.save(file);
-                        metadataset.add(tag.getDescription());
+
                     }
                 }
 
-                //
-                // Each Directory may also contain error messages
-                //
                 for (String error : directory.getErrors()) {
                     System.err.println("ERROR: " + error);
                 }
-                file.setMetadatatest(metadataset);
-                imageRepository.save(file);
+
             }
 
         } catch (ImageProcessingException e) {

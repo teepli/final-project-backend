@@ -15,8 +15,10 @@ public class ImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private boolean reference = true;
 
     private String url;
+    
 
     @ManyToOne
     @JoinColumn(name="photoshoot_plan_entity_id")
@@ -28,8 +30,6 @@ public class ImageEntity {
     @ElementCollection
     private List<MetadataEntity> metadatalist = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> metadatatest = new ArrayList<>();
 
     public ImageEntity(String url) {
         this.url = url;
@@ -37,14 +37,6 @@ public class ImageEntity {
     }
 
     public ImageEntity() {
-    }
-
-    public List<String> getMetadatatest() {
-        return metadatatest;
-    }
-
-    public void setMetadatatest(List<String> metadatatest) {
-        this.metadatatest = metadatatest;
     }
 
     public List<MetadataEntity> getMetadatalist() {
@@ -64,6 +56,13 @@ public class ImageEntity {
         this.id = id;
     }
 
+    public boolean isReference() {
+        return reference;
+    }
+
+    public void setReference(boolean reference) {
+        this.reference = reference;
+    }
 
     public String getUrl() {
         return url;
