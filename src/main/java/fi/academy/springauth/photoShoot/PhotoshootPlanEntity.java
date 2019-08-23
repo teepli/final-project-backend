@@ -25,7 +25,7 @@ public class PhotoshootPlanEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "photoshoot")
     @JsonIgnoreProperties("photoshoot")
-    private List<ImageEntity> referencePictures;  //= new ArrayList<>();
+    private List<ImageEntity> referencePictures = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "app_user_entity_id")
