@@ -43,7 +43,11 @@ public class PhotoshootPlanService {
                             @RequestParam (required = false) String description,
                             @RequestParam (required = false) String notes,
                             @RequestParam (required = false) String participants,
-                            @RequestParam(required = false) MultipartFile image,
+                            @RequestParam (required = false) MultipartFile image1,
+                            @RequestParam (required = false) MultipartFile image2,
+                            @RequestParam (required = false) MultipartFile image3,
+                            @RequestParam (required = false) MultipartFile image4,
+                            @RequestParam (required = false) MultipartFile image5,
                             Principal user)throws IOException {
         Optional<AppUserEntity> appuser = appUserRepository.findByUsername(user.getName());
         if (appuser.get().getUsername().equals(user.getName())) {
@@ -55,8 +59,28 @@ public class PhotoshootPlanService {
             plan.setNotes(notes);
             plan.setParticipants(participants);
             plan.setCreator(appuser.get());
-            if (image != null) {
-                ImageEntity i = imageService.createImage(image);
+            if (image1 != null) {
+                ImageEntity i = imageService.createImage(image1);
+                i.setPhotoshoot(plan);
+                //plan.getReferencePictures().add(i);
+            }
+            if (image2 != null) {
+                ImageEntity i = imageService.createImage(image2);
+                i.setPhotoshoot(plan);
+                //plan.getReferencePictures().add(i);
+            }
+            if (image3 != null) {
+                ImageEntity i = imageService.createImage(image3);
+                i.setPhotoshoot(plan);
+                //plan.getReferencePictures().add(i);
+            }
+            if (image4 != null) {
+                ImageEntity i = imageService.createImage(image4);
+                i.setPhotoshoot(plan);
+                //plan.getReferencePictures().add(i);
+            }
+            if (image5 != null) {
+                ImageEntity i = imageService.createImage(image5);
                 i.setPhotoshoot(plan);
                 //plan.getReferencePictures().add(i);
             }

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static javax.management.Query.value;
+
 @Entity
 public class PhotoshootPlanEntity {
 
@@ -21,6 +23,8 @@ public class PhotoshootPlanEntity {
     private String header;
     private Date date;
     private String location;
+    private Double latitude;
+    private Double longitude;
     private String description;
     private String notes;
     private String participants;
@@ -108,8 +112,8 @@ public class PhotoshootPlanEntity {
     public List<ImageEntity> getReferencePictures() {
         return referencePictures; }
 
-    public void setReferencePictures(List<ImageEntity> referencePicture) {
-        this.referencePictures = referencePicture;
+    public void setReferencePictures(List<ImageEntity> referencePictures) {
+        this.referencePictures = referencePictures;
     }
 
     public List<ImageEntity> getReadyPictures() {
@@ -118,5 +122,21 @@ public class PhotoshootPlanEntity {
 
     public void setReadyPictures(List<ImageEntity> readyPictures) {
         this.readyPictures = readyPictures;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }
