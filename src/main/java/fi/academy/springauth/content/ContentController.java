@@ -1,10 +1,12 @@
 package fi.academy.springauth.content;
 
+
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.appUser.AppUserRepository;
 import fi.academy.springauth.images.ImageEntity;
 import fi.academy.springauth.images.ImageRepository;
-import fi.academy.springauth.images.ImageService;
+
+import fi.academy.springauth.utils.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
