@@ -43,8 +43,8 @@ public class PhotoshootPlanService {
                                          @RequestParam(required = false) String description,
                                          @RequestParam(required = false) String notes,
                                          @RequestParam(required = false) String participants,
-                                         @RequestParam(required = false) double longitude,
-                                         @RequestParam(required = false) double latitude,
+                                         @RequestParam(required = false) Double longitude,
+                                         @RequestParam(required = false) Double latitude,
                                          @RequestParam(required = false) MultipartFile image1,
                                          @RequestParam(required = false) MultipartFile image2,
                                          @RequestParam(required = false) MultipartFile image3,
@@ -151,6 +151,9 @@ public class PhotoshootPlanService {
                 plan.setCreator(creator);
                 List<MultipartFile> pictures = new ArrayList<>();
                 int sallitutKuvat = 5 - currentPlan.get().getReferencePictures().size();
+                if (sallitutKuvat == 0) {
+                    return new ResponseEntity<>("This plan already has the maximum amount of ready pictures. Please remove pictures if you want to add new ones.", HttpStatus.BAD_REQUEST);
+                }
                 if (image1 != null) {
                     pictures.add(image1);
                 }
@@ -167,7 +170,7 @@ public class PhotoshootPlanService {
                     pictures.add(image5);
                 }
                 if (pictures.size() > sallitutKuvat) {
-                    return new ResponseEntity<>("Voit lisätä vain " + sallitutKuvat + " kuvaa. Valitse lisättävät kuvat.", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("There's space for only " + sallitutKuvat + " pictures. Choose the ones you want to add to your plan.", HttpStatus.BAD_REQUEST);
                 } else {
                     for (MultipartFile kuva : pictures) {
                         ImageEntity a = imageService.createImage(kuva);
@@ -199,6 +202,9 @@ public class PhotoshootPlanService {
                 plan.setCreator(creator);
                 List<MultipartFile> pictures = new ArrayList<>();
                 int sallitutKuvat = 5 - currentPlan.get().getReadyPictures().size();
+                if (sallitutKuvat == 0) {
+                    return new ResponseEntity<>("This plan already has the maximum amount of ready pictures. Please remove pictures if you want to add new ones.", HttpStatus.BAD_REQUEST);
+                }
                 if (image1 != null) {
                     pictures.add(image1);
                 }
@@ -216,8 +222,6 @@ public class PhotoshootPlanService {
                 }
                 if (pictures.size() > sallitutKuvat) {
                     return new ResponseEntity<>("There's space for only " + sallitutKuvat + " pictures. Choose the ones you want to add to your plan.", HttpStatus.BAD_REQUEST);
-                } else if (pictures.size() == sallitutKuvat){
-                    return new ResponseEntity<>("This plan already has the maximum amount of ready pictures. Please remove pictures if you want to add new ones.", HttpStatus.BAD_REQUEST);
                 } else {
                     for (MultipartFile kuva : pictures) {
                         ImageEntity a = imageService.createImage(kuva);
@@ -238,7 +242,7 @@ public class PhotoshootPlanService {
     public ResponseEntity<?> findOneById(long id, Principal user){
         Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
         if (!currentPlan.isPresent()){
-            return new ResponseEntity<>("Virhe: annetulla id:llä ei löytynyt suunnitelmaa", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("You have no plan with given id. Please check id and try again.", HttpStatus.NOT_FOUND);
         }
         if (currentPlan.get().getCreator().getUsername().equals(user.getName())){
             return  new ResponseEntity<>(currentPlan.get(), HttpStatus.OK);

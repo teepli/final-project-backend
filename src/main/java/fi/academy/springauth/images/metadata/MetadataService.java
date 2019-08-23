@@ -36,7 +36,7 @@ public class MetadataService {
 
                 if (directory.getName().contains("Exif")) {
                     for (Tag tag : directory.getTags()) {
-
+                        System.out.println(tag);
                         MetadataEntity me = new MetadataEntity();
                         me.setMetadata(tag.getTagName() + " : " + tag.getDescription());
                         me.setImage(file);

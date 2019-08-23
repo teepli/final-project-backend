@@ -48,8 +48,8 @@ public class PhotoshootPlanController {
                                         @RequestParam(required = false) String description,
                                         @RequestParam(required = false) String notes,
                                         @RequestParam(required = false) String participants,
-                                        @RequestParam(required = false) double longitude,
-                                        @RequestParam(required = false) double latitude,
+                                        @RequestParam(required = false) Double longitude,
+                                        @RequestParam(required = false) Double latitude,
                                         @RequestParam(required = false) MultipartFile image1,
 
                                         @RequestParam(required = false) MultipartFile image2,
