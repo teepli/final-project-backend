@@ -23,8 +23,8 @@ public class PhotoshootPlanEntity {
     private String header;
     private Date date;
     private String location;
-    private Double latitude;
-    private Double longitude;
+    private double latitude;
+    private double longitude;
     private String description;
     private String notes;
     private String participants;
