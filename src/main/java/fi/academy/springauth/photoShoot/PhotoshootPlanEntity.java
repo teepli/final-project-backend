@@ -1,9 +1,9 @@
 package fi.academy.springauth.photoShoot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.images.ImageEntity;
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -31,7 +31,13 @@ public class PhotoshootPlanEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "photoshoot")
     @JsonIgnoreProperties("photoshoot")
+    @Where(clause = "reference = true")
     private List<ImageEntity> referencePictures = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "photoshoot")
+    @JsonIgnoreProperties("photoshoot")
+    @Where(clause = "reference = false")
+    private List<ImageEntity> readyPictures = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "app_user_entity_id")
@@ -106,8 +112,17 @@ public class PhotoshootPlanEntity {
     public List<ImageEntity> getReferencePictures() {
         return referencePictures; }
 
-    public void setReferencePictures(List<ImageEntity> referencePicture) {
-        this.referencePictures = referencePicture; }
+    public void setReferencePictures(List<ImageEntity> referencePictures) {
+        this.referencePictures = referencePictures;
+    }
+
+    public List<ImageEntity> getReadyPictures() {
+        return readyPictures;
+    }
+
+    public void setReadyPictures(List<ImageEntity> readyPictures) {
+        this.readyPictures = readyPictures;
+    }
 
     public double getLatitude() {
         return latitude;

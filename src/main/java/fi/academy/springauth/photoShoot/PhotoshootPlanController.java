@@ -66,6 +66,15 @@ public class PhotoshootPlanController {
         return photoshootPlanService.addPictures(id, image1, image2, image3, image4, image5, user);
     }
 
+    @PutMapping("/{id}/readypictures")
+    public ResponseEntity<?> addReadyPictures(@PathVariable long id, @RequestParam(required = false) MultipartFile image1,
+                                         @RequestParam(required = false) MultipartFile image2,
+                                         @RequestParam(required = false) MultipartFile image3,
+                                         @RequestParam(required = false) MultipartFile image4,
+                                         @RequestParam(required = false) MultipartFile image5, Principal user) throws IOException {
+        return photoshootPlanService.addReadyPictures(id, image1, image2, image3, image4, image5, user);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePlan(@PathVariable long id, Principal user) {
         return photoshootPlanService.deletePlan(id, user);
