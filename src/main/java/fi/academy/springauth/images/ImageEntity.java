@@ -13,6 +13,8 @@ public class ImageEntity {
     private Long id;
 
     private String url;
+    @Column(name = "REFERENCE")
+    private boolean reference;
 
     @ManyToOne
     @JoinColumn(name="photoshoot_plan_entity_id")
