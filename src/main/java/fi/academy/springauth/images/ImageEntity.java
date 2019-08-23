@@ -14,8 +14,7 @@ public class ImageEntity {
     private boolean reference = true;
 
     private String url;
-    @Column(name = "REFERENCE")
-    private boolean reference;
+    
 
     @ManyToOne
     @JoinColumn(name="photoshoot_plan_entity_id")
