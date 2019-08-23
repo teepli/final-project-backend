@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,15 +52,31 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
 
         if (!file.isEmpty()) {
 //            Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, time + file.getOriginalFilename()));
-            file.getOriginalFilename()
-            String newFile = amazonS3Client.uploadFileToS3Bucket(file, true);
-            created = imageRepository.save(new ImageEntity());
-            // https://github.com/drewnoakes/metadata-extractor
-            metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()), created);
 
+            String newFile = amazonS3Client.uploadFileToS3Bucket(file, true);
+            created = imageRepository.save(new ImageEntity(newFile));
+            // https://github.com/drewnoakes/metadata-extractor
+            readMetadata(file, created, newFile);
         }
         return created;
 
+    }
+
+    private void readMetadata(MultipartFile multipartFile, ImageEntity created, String fileName) {
+
+        try {
+            File file = new File(fileName);
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(file);
+            fos.write(multipartFile.getBytes());
+            fos.close();
+            metadataService.metadataReader(file, created);
+            file.delete();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
