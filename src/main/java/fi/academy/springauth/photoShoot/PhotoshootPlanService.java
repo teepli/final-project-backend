@@ -37,17 +37,19 @@ public class PhotoshootPlanService {
     private ImageService imageService;
 
 
-    public ResponseEntity<?> createPlan (@RequestParam (required = false) String header,
-                            @RequestParam (required = false) Date date,
-                            @RequestParam (required = false) String location,
-                            @RequestParam (required = false) String description,
-                            @RequestParam (required = false) String notes,
-                            @RequestParam (required = false) String participants,
-                            @RequestParam (required = false) MultipartFile image1,
-                            @RequestParam (required = false) MultipartFile image2,
-                            @RequestParam (required = false) MultipartFile image3,
-                            @RequestParam (required = false) MultipartFile image4,
-                            @RequestParam (required = false) MultipartFile image5,
+    public ResponseEntity<?> createPlan (@RequestParam(required = false) String header,
+                                         @RequestParam(required = false) Date date,
+                                         @RequestParam(required = false) String location,
+                                         @RequestParam(required = false) String description,
+                                         @RequestParam(required = false) String notes,
+                                         @RequestParam(required = false) String participants,
+                                         @RequestParam(required = false) double longitude,
+                                         @RequestParam(required = false) double latitude,
+                                         @RequestParam(required = false) MultipartFile image1,
+                                         @RequestParam(required = false) MultipartFile image2,
+                                         @RequestParam(required = false) MultipartFile image3,
+                                         @RequestParam(required = false) MultipartFile image4,
+                                         @RequestParam(required = false) MultipartFile image5,
                             Principal user)throws IOException {
         Optional<AppUserEntity> appuser = appUserRepository.findByUsername(user.getName());
         if (appuser.get().getUsername().equals(user.getName())) {
@@ -59,6 +61,8 @@ public class PhotoshootPlanService {
             plan.setNotes(notes);
             plan.setParticipants(participants);
             plan.setCreator(appuser.get());
+            plan.setLatitude(latitude);
+            plan.setLongitude(longitude);
             if (image1 != null) {
                 ImageEntity i = imageService.createImage(image1);
                 i.setPhotoshoot(plan);
