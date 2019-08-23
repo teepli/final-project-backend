@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -103,47 +104,58 @@ public class PhotoshootPlanService {
         return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
     }
 
-    /** Kuvien lisäys olemassaolevalle suunnitelmalle. Kuvia voi lisätä max5 ja polkuparametrina käytetään suunnitelman
-     * id:tä. Jotta tärkeitä tietoja ei häviä päivityksen yhteydessä, talletetaan id ja sunnitelman luoja*/
+    /** Kuvien lisäys olemassaolevalle suunnitelmalle. Kuvia voi lisätä kunnes kuvia on kaikkiaan 5.
+     * Polkuparametrina käytetään suunnitelman id:tä ja verrataan sitä nykyisen suunnitelman id:hen.
+     * Jotta tärkeitä tietoja ei häviä päivityksen yhteydessä, talletetaan id ja sunnitelman luoja.
+     * Tehdään lisättävistä kuvista lista, ja tarkistetaan mahtuuko kaikki. Jos ei, pyydetään valitsemaan lisättävät.
+     */
     public ResponseEntity<?> addPictures(@PathVariable long id, @RequestParam(required = false) MultipartFile image1,
                                          @RequestParam(required = false) MultipartFile image2,
                                          @RequestParam(required = false) MultipartFile image3,
                                          @RequestParam(required = false) MultipartFile image4,
                                          @RequestParam(required = false) MultipartFile image5, Principal user) throws IOException {
-    Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
-    Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
-        if (currentPlan.get().getId() == id){
-        PhotoshootPlanEntity plan = currentPlan.get();
-        if (currentPlan.get().getCreator().getUsername().equals(user.getName())) {
-            AppUserEntity creator = currentPlan.get().getCreator();
-            plan.setId(id);
-            plan.setCreator(creator);
-            if(image1 != null){
-                ImageEntity a = imageService.createImage(image1);
-                a.setPhotoshoot(plan);
+        Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
+        // Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
+        if (currentPlan.get().getId() == id) {
+            PhotoshootPlanEntity plan = currentPlan.get();
+            if (currentPlan.get().getCreator().getUsername().equals(user.getName())) {
+                AppUserEntity creator = currentPlan.get().getCreator();
+                plan.setId(id);
+                plan.setCreator(creator);
+                List<MultipartFile> pictures = new ArrayList<>();
+                int sallitutKuvat = 5 - currentPlan.get().getReferencePictures().size();
+                if (image1 != null) {
+                    pictures.add(image1);
+                }
+                if (image2 != null) {
+                    pictures.add(image2);
+                }
+                if (image3 != null) {
+                    pictures.add(image3);
+                }
+                if (image4 != null) {
+                    pictures.add(image4);
+                }
+                if (image5 != null) {
+                    pictures.add(image5);
+                }
+                if (pictures.size() > sallitutKuvat) {
+                    return new ResponseEntity<>("Voit lisätä vain " + sallitutKuvat + " kuvaa. Valitse lisättävät kuvat.", HttpStatus.BAD_REQUEST);
+                } else {
+                    for (MultipartFile kuva : pictures) {
+                        ImageEntity a = imageService.createImage(kuva);
+                        currentPlan.get().getReferencePictures().add(a);
+                        a.setPhotoshoot(plan);
+                    }
+                    photoshootPlanRepository.save(plan);
+                }
             }
-            if(image2 != null){
-                ImageEntity b = imageService.createImage(image2);
-                b.setPhotoshoot(plan);
-            }
-            if(image3 != null){
-                ImageEntity c = imageService.createImage(image3);
-                c.setPhotoshoot(plan);
-            }
-            if(image4 != null){
-                ImageEntity d = imageService.createImage(image4);
-                d.setPhotoshoot(plan);
-            }
-            if(image5 != null){
-                ImageEntity e = imageService.createImage(image5);
-                e.setPhotoshoot(plan);
-            }
-            photoshootPlanRepository.save(plan); //tämä tarvitaan, jotta aimmin postatut kuvat säilyvät suunnitelmassa
-            return new ResponseEntity<>(plan, HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-        return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
-    }
+
+
+    /** Hakee suunnitelman id:n perusteella. Tarkistetaan käyttäjän oikeus hakuun Principal userin avulla. */
 
     public ResponseEntity<?> findOneById(long id, Principal user){
         Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
