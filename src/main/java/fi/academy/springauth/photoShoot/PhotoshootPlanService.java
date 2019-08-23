@@ -115,7 +115,6 @@ public class PhotoshootPlanService {
                                          @RequestParam(required = false) MultipartFile image4,
                                          @RequestParam(required = false) MultipartFile image5, Principal user) throws IOException {
         Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
-        // Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
         if (currentPlan.get().getId() == id) {
             PhotoshootPlanEntity plan = currentPlan.get();
             if (currentPlan.get().getCreator().getUsername().equals(user.getName())) {
@@ -154,9 +153,60 @@ public class PhotoshootPlanService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Toteutuneiden kuvien lisäys, max 5 kuvaa kerrallaan ja kuvia mahtuu 5 per suunnitelma.
+     * Toimii täsmälleen kuten referenssikuvien lisäys, paitsi että muutetaan kuvan oletus refekuvasta falseksi.
+     */
+    public ResponseEntity<?> addReadyPictures(@PathVariable long id, @RequestParam(required = false) MultipartFile image1,
+                                         @RequestParam(required = false) MultipartFile image2,
+                                         @RequestParam(required = false) MultipartFile image3,
+                                         @RequestParam(required = false) MultipartFile image4,
+                                         @RequestParam(required = false) MultipartFile image5, Principal user) throws IOException {
+        Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
+        if (currentPlan.get().getId() == id) {
+            PhotoshootPlanEntity plan = currentPlan.get();
+            if (currentPlan.get().getCreator().getUsername().equals(user.getName())) {
+                AppUserEntity creator = currentPlan.get().getCreator();
+                plan.setId(id);
+                plan.setCreator(creator);
+                List<MultipartFile> pictures = new ArrayList<>();
+                int sallitutKuvat = 5 - currentPlan.get().getReadyPictures().size();
+                if (image1 != null) {
+                    pictures.add(image1);
+                }
+                if (image2 != null) {
+                    pictures.add(image2);
+                }
+                if (image3 != null) {
+                    pictures.add(image3);
+                }
+                if (image4 != null) {
+                    pictures.add(image4);
+                }
+                if (image5 != null) {
+                    pictures.add(image5);
+                }
+                if (pictures.size() > sallitutKuvat) {
+                    return new ResponseEntity<>("There's space for only " + sallitutKuvat + " pictures. Choose the ones you want to add to your plan.", HttpStatus.BAD_REQUEST);
+                } else if (pictures.size() == sallitutKuvat){
+                    return new ResponseEntity<>("This plan already has the maximum amount of ready pictures. Please remove pictures if you want to add new ones.", HttpStatus.BAD_REQUEST);
+                } else {
+                    for (MultipartFile kuva : pictures) {
+                        ImageEntity a = imageService.createImage(kuva);
+                        a.setReference(false);
+                        currentPlan.get().getReadyPictures().add(a);
+                        a.setPhotoshoot(plan);
+                    }
+                    photoshootPlanRepository.save(plan);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-    /** Hakee suunnitelman id:n perusteella. Tarkistetaan käyttäjän oikeus hakuun Principal userin avulla. */
-
+    /**
+     * Hakee suunnitelman id:n perusteella. Tarkistetaan käyttäjän oikeus hakuun Principal userin avulla.
+     */
     public ResponseEntity<?> findOneById(long id, Principal user){
         Optional<PhotoshootPlanEntity> currentPlan = photoshootPlanRepository.findById(id);
         if (!currentPlan.isPresent()){

@@ -11,6 +11,7 @@ public class ImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private boolean reference = true;
 
     private String url;
 
@@ -35,6 +36,13 @@ public class ImageEntity {
         this.id = id;
     }
 
+    public boolean isReference() {
+        return reference;
+    }
+
+    public void setReference(boolean reference) {
+        this.reference = reference;
+    }
 
     public String getUrl() {
         return url;
