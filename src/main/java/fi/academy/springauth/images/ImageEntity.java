@@ -25,7 +25,7 @@ public class ImageEntity {
     @JsonIgnoreProperties("referencePictures")
     private PhotoshootPlanEntity photoshoot;
 
-    @OneToMany(mappedBy = "image")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "image")
     @JsonIgnoreProperties("image")
     @ElementCollection
     private List<MetadataEntity> metadatalist = new ArrayList<>();

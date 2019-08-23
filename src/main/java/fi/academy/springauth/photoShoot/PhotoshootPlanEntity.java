@@ -23,8 +23,8 @@ public class PhotoshootPlanEntity {
     private String header;
     private Date date;
     private String location;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
     private String description;
     private String notes;
     private String participants;
@@ -124,19 +124,19 @@ public class PhotoshootPlanEntity {
         this.readyPictures = readyPictures;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 }
