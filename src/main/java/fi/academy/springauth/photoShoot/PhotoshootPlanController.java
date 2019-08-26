@@ -42,19 +42,22 @@ public class PhotoshootPlanController {
 
     @PostMapping("")
     @Transactional
-    public ResponseEntity<?> createPlan (@RequestParam (required = false) String header,
-                            @RequestParam (required = false) Date date,
-                            @RequestParam (required = false) String location,
-                            @RequestParam (required = false) String description,
-                            @RequestParam (required = false) String notes,
-                            @RequestParam (required = false) String participants,
-                            @RequestParam(required = false) MultipartFile image1,
-                                         @RequestParam (required = false) MultipartFile image2,
-                                         @RequestParam (required = false) MultipartFile image3,
-                                         @RequestParam (required = false) MultipartFile image4,
-                                         @RequestParam (required = false) MultipartFile image5,
-                            Principal user)throws IOException {
-        return photoshootPlanService.createPlan(header, date, location, description, notes, participants, image1, image2, image3, image4, image5, user);
+    public ResponseEntity<?> createPlan(@RequestParam(required = false) String header,
+                                        @RequestParam(required = false) Date date,
+                                        @RequestParam(required = false) String location,
+                                        @RequestParam(required = false) String description,
+                                        @RequestParam(required = false) String notes,
+                                        @RequestParam(required = false) String participants,
+                                        @RequestParam(required = false) Double longitude,
+                                        @RequestParam(required = false) Double latitude,
+                                        @RequestParam(required = false) MultipartFile image1,
+
+                                        @RequestParam(required = false) MultipartFile image2,
+                                        @RequestParam(required = false) MultipartFile image3,
+                                        @RequestParam(required = false) MultipartFile image4,
+                                        @RequestParam(required = false) MultipartFile image5,
+                                        Principal user) throws IOException {
+        return photoshootPlanService.createPlan(header, date, location, description, notes, participants, longitude, latitude, image1, image2, image3, image4, image5, user);
     }
 
     @PutMapping("/{id}/pictures")
