@@ -19,7 +19,7 @@ public class AppUserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
+    @NotBlank(message = "Not valid email")
     @Email
     private String email;
 
@@ -35,9 +35,9 @@ public class AppUserEntity {
     @JsonIgnoreProperties("creator")
     private List<PhotoshootPlanEntity> plans;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "creator")
-//    @JsonIgnoreProperties("creator")
-//    private List<ContentEntity> content;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "creator")
+    @JsonIgnoreProperties("creator")
+    private List<ContentEntity> content;
 //
 //    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL)
 //    @JsonIgnoreProperties("friend")
@@ -50,6 +50,14 @@ public class AppUserEntity {
         this.email = email;
         this.username = username;
         this.password = password;
+    }
+
+    public List<ContentEntity> getContent() {
+        return content;
+    }
+
+    public void setContent(List<ContentEntity> content) {
+        this.content = content;
     }
 
     public AppUserEntity(long id) {

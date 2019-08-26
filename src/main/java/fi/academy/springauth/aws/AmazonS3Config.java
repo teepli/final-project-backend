@@ -9,10 +9,12 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 
 @Configuration
+@Profile("prod")
 public class AmazonS3Config {
     @Value("${aws.access.key.id}")
     private String awsKeyId;

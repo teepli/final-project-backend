@@ -26,7 +26,7 @@ public class ContentController {
     ContentRepository contentRepository;
 
     @Autowired
-    ImageRepository imageRepository;
+    ContentImageRepository contentImageRepository;
 
     @Autowired
     ImageService imageService;
@@ -34,31 +34,32 @@ public class ContentController {
     @Autowired
     AppUserRepository appUserRepository;
 
-//    @GetMapping("")
-//    public Iterable<ContentEntity> testContent() {
-//        return contentRepository.findAll();
-//    }
-//    @PostMapping("")
-//    @Transactional
-//    public ResponseEntity<?> addImage(@RequestBody MultipartFile image,
-//                                      @RequestParam String content,
-//                                      Principal principal) throws IOException {
-//        System.out.println(content);
-//        System.out.println(image);
-//        System.out.println(principal.getName());
-//
+    @GetMapping("")
+    public Iterable<ContentEntity> testContent() {
+        return contentRepository.findAll();
+    }
+
+    @PostMapping("")
+    @Transactional
+    public ResponseEntity<?> addImage(@RequestBody MultipartFile image,
+                                      @RequestParam String content,
+                                      Principal principal) throws IOException {
+        System.out.println(content);
+        System.out.println(image);
+        System.out.println(principal.getName());
+
 //        ImageEntity newImage = imageService.createImage(image);
 //        AppUserEntity creator = appUserRepository.findByUsername(principal.getName());
 //        ContentEntity newContent = new ContentEntity(content, newImage, creator);
 //        contentRepository.save(newContent);
-//
-//        URI location = UriComponentsBuilder.newInstance()
-//                .scheme("http")
-//                .host("localhost")
-//                .port(8080)
-//                .path("/image/{id}")
-//                .buildAndExpand(newImage.getId())
-//                .toUri();
-//        return ResponseEntity.created(location).build();
-//    }
+
+        URI location = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(8080)
+                .path("/image/{id}")
+                .buildAndExpand(4)
+                .toUri();
+        return ResponseEntity.created(location).build();
+    }
 }

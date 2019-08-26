@@ -51,9 +51,7 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         long time = System.currentTimeMillis();
 
         if (!file.isEmpty()) {
-//            Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, time + file.getOriginalFilename()));
-
-            String newFile = amazonS3Client.uploadFileToS3Bucket(file, true);
+            String newFile = amazonS3Client.uploadFileToS3Bucket(file, false);
             created = imageRepository.save(new ImageEntity(newFile));
             // https://github.com/drewnoakes/metadata-extractor
             readMetadata(file, created, newFile);
