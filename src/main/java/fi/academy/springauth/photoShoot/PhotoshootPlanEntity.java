@@ -25,7 +25,9 @@ public class PhotoshootPlanEntity {
     private String location;
     private Double latitude;
     private Double longitude;
+    @Column(length = 8000)
     private String description;
+    @Column(length = 8000)
     private String notes;
     private String participants;
 
