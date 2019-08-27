@@ -30,10 +30,8 @@ public class MetadataService {
     private ImageRepository imageRepository;
 
     /**
-     * Return list of string containing metadata of checked image
+     * Returns list of string containing metadata of checked image
      * @param image Image to be checked
-     * @throws imageprosessingexception
-     * @throws ioexception
      * @return List of metadata-strings
      */
     public List<String> metadataReader(File image) {

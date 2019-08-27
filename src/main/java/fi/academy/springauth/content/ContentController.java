@@ -59,7 +59,7 @@ public class ContentController {
         AppUserEntity creator = appUserRepository.findByUsername(principal.getName()).get();
         boolean featured = System.currentTimeMillis() % 5 == 0 ? true : false;
         ContentEntity newContent = new ContentEntity(content, newImage, creator, featured);
-//        newContent.setTags(awsRekognitionService.detectUploadedLabelsResult(imag));
+
 //        newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
         contentRepository.save(newContent);
         newImage.setContent(newContent);

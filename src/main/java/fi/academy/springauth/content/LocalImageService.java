@@ -29,6 +29,12 @@ public class LocalImageService implements fi.academy.springauth.utils.ContentIma
     @Autowired
     private MetadataService metadataService;
 
+    /**
+     * Creates new ContentImageEntity, reads metadata from picture and returns created object, used in local saving
+     * @param file Multipartfile to be saved
+     * @return ContentImageEntity with metadata
+     * @throws IOException
+     */
     @Override
     public ContentImageEntity createImage(MultipartFile file) throws IOException {
         ContentImageEntity created = null;

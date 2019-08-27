@@ -13,11 +13,13 @@ import java.security.Principal;
 @Profile("prod")
 public class AwsImageService implements fi.academy.springauth.utils.ImageService {
 
+    // TODO: Functionality to save ContentImage to S3
     @Override
     public ImageEntity createImage(MultipartFile file) throws IOException {
         return null;
     }
 
+    // TODO: Functionality to delete ContentImage from S3
     @Override
     public ResponseEntity<?> deleteImage(long id, Principal user) {
         return null;

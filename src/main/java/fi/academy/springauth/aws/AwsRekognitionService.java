@@ -24,6 +24,13 @@ public class AwsRekognitionService {
         this.client = client;
     }
 
+    /**
+     * Uses AWS Rekognition to detect objects (labels) in uploaded picture (max 10, confidence 80),
+     * used in local-dev
+     * @param imageToCheck Multipartfile to be checked
+     * @return List<Label> List of labels detected from picture
+     * @throws IOException
+     */
     public List<Label> detectUploadedLabelsResult(MultipartFile imageToCheck) throws IOException {
         DetectLabelsRequest request = new DetectLabelsRequest()
                 .withImage(new Image().withBytes(ByteBuffer.wrap(imageToCheck.getBytes())))
@@ -34,6 +41,12 @@ public class AwsRekognitionService {
         return dl.getLabels();
     }
 
+    /**
+     * Uses AWS Rekognition to detect objects (labels) from picture in S3 bucket (max 10, confidence 80),
+     * used in prod-dev
+     * @param photo String, filenime in S3-bucket (as in DB)
+     * @return
+     */
     public List<Label> detectS3ImageLabelsResults(String photo) {
         DetectLabelsRequest request = new DetectLabelsRequest()
                 .withImage(new Image()

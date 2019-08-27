@@ -48,14 +48,18 @@ public class AmazonS3Client {
         this.awsS3AudioBucket = awsS3AudioBucket;
     }
 
-
+    /**
+     * Uploads picture to S3-bucket, adds identifier from time (milliseconds), used in prod-env
+     * @param multipartFile File to uploaded
+     * @param enablePublicReadAccess boolean for emabling puvlic access
+     * @return Name of the file, relative path
+     */
     @Async
     public String uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess) {
         String fileName = multipartFile.getOriginalFilename();
         long time = System.currentTimeMillis();
         fileName = time + fileName;
         try {
-            //creating the file in the server (temporarily)
             File file = new File(fileName);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(multipartFile.getBytes());

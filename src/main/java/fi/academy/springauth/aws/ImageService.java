@@ -46,6 +46,12 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         this.amazonS3Client = amazonClient;
     }
 
+    /**
+     * Creates new image, uploads it to S3-bucket and reads and saves metadaa from picture
+     * @param file to be saved
+     * @return ImageEntity created ImageEntity with saved metadata
+     * @throws IOException
+     */
     public ImageEntity createImage(MultipartFile file) throws IOException {
         ImageEntity created = null;
         long time = System.currentTimeMillis();
@@ -60,6 +66,13 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
 
     }
 
+    /**
+     * Converts multipartfile to new File, reads metadata from picture, sets metadata to ImageEntity and
+     * deletes local copy of new file
+     * @param multipartFile File to be read/converted
+     * @param created Imageentity created at
+     * @param fileName Filename (string) of created image
+     */
     private void readMetadata(MultipartFile multipartFile, ImageEntity created, String fileName) {
 
         try {
@@ -77,7 +90,7 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         }
     }
 
-
+    // TODO: Functionality to delete from S3-bucket
     public ResponseEntity<?> deleteImage(long id, Principal user) {
         Optional<ImageEntity> currentImage = Optional.ofNullable(imageRepository.findById(id));
 
