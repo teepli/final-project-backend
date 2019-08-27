@@ -1,5 +1,11 @@
 package fi.academy.springauth.aws;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.rekognition.AmazonRekognition;
+import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -8,6 +14,9 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -24,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Component
+@Configuration
 @Profile("prod")
 public class AmazonS3Client {
     private String awsS3AudioBucket;
@@ -37,6 +47,7 @@ public class AmazonS3Client {
                 .withRegion(awsRegion.getName()).build();
         this.awsS3AudioBucket = awsS3AudioBucket;
     }
+
 
     @Async
     public String uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess) {

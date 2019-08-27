@@ -68,7 +68,7 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
             fos = new FileOutputStream(file);
             fos.write(multipartFile.getBytes());
             fos.close();
-            metadataService.metadataReader(file, created);
+            created.setMetadatalist(metadataService.metadataReader(file));
             file.delete();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -1,5 +1,8 @@
 package fi.academy.springauth.aws;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.services.rekognition.AmazonRekognition;
+import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,4 +57,6 @@ public class AmazonS3Config {
     public String getAWSS3AudioBucket() {
         return awsS3AudioBucket;
     }
+
+
 }

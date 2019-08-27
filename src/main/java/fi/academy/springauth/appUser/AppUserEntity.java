@@ -21,6 +21,7 @@ public class AppUserEntity {
 
     @NotBlank(message = "Not valid email")
     @Email
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String email;
 
     @NotBlank
@@ -32,11 +33,11 @@ public class AppUserEntity {
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "creator")
-    @JsonIgnoreProperties("creator")
+    @JsonIgnoreProperties(value = {"creator", "content"})
     private List<PhotoshootPlanEntity> plans;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "creator")
-    @JsonIgnoreProperties("creator")
+    @JsonIgnoreProperties(value = {"content", "creator"})
     private List<ContentEntity> content;
 //
 //    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL)

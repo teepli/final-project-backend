@@ -3,9 +3,11 @@ package fi.academy.springauth.content;
 
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.appUser.AppUserRepository;
+import fi.academy.springauth.aws.AwsRekognitionService;
 import fi.academy.springauth.images.ImageEntity;
 import fi.academy.springauth.images.ImageRepository;
 
+import fi.academy.springauth.utils.ContentImageService;
 import fi.academy.springauth.utils.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,10 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Date;
 
 @RestController
-@RequestMapping("/content")
+@RequestMapping("/api/content")
 public class ContentController {
 
     @Autowired
@@ -29,10 +32,13 @@ public class ContentController {
     ContentImageRepository contentImageRepository;
 
     @Autowired
-    ImageService imageService;
+    ContentImageService contentImageService;
 
     @Autowired
     AppUserRepository appUserRepository;
+
+    @Autowired
+    AwsRekognitionService awsRekognitionService;
 
     @GetMapping("")
     public Iterable<ContentEntity> testContent() {
@@ -47,11 +53,17 @@ public class ContentController {
         System.out.println(content);
         System.out.println(image);
         System.out.println(principal.getName());
+        System.out.println(awsRekognitionService.detectUploadedLabelsResult(image));
 
-//        ImageEntity newImage = imageService.createImage(image);
-//        AppUserEntity creator = appUserRepository.findByUsername(principal.getName());
-//        ContentEntity newContent = new ContentEntity(content, newImage, creator);
-//        contentRepository.save(newContent);
+        ContentImageEntity newImage = contentImageService.createImage(image);
+        AppUserEntity creator = appUserRepository.findByUsername(principal.getName()).get();
+        boolean featured = System.currentTimeMillis() % 5 == 0 ? true : false;
+        ContentEntity newContent = new ContentEntity(content, newImage, creator, featured);
+//        newContent.setTags(awsRekognitionService.detectUploadedLabelsResult(imag));
+//        newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
+        contentRepository.save(newContent);
+        newImage.setContent(newContent);
+        contentImageRepository.save(newImage);
 
         URI location = UriComponentsBuilder.newInstance()
                 .scheme("http")

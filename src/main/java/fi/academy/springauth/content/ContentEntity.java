@@ -1,10 +1,13 @@
 package fi.academy.springauth.content;
 
+import com.amazonaws.services.rekognition.model.Label;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.images.ImageEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ContentEntity {
@@ -19,10 +22,35 @@ public class ContentEntity {
 
     @ManyToOne
     @JoinColumn(name = "app_user_entity_id")
-    @JsonIgnoreProperties("content")
+    @JsonIgnoreProperties(value = {"content", "plans"})
     private AppUserEntity creator;
 
+    private boolean featured;
+
     public ContentEntity() {
+    }
+
+    public ContentEntity(String message, ContentImageEntity image, AppUserEntity creator) {
+        this.message = message;
+        this.image = image;
+        this.creator = creator;
+    }
+
+    public ContentEntity(String message, ContentImageEntity image, AppUserEntity creator, boolean featured) {
+        this.message = message;
+        this.image = image;
+        this.creator = creator;
+        this.featured = featured;
+    }
+
+
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 
     public Long getId() {

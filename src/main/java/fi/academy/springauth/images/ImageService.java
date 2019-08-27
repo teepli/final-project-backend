@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,6 +42,12 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         this.metadataService = metadataService;
     }
 
+    /**
+     * Creates new ImageEntity, reads metadata from picture and returns created object, used in local saving
+     * @param file Multipartfile to be saved
+     * @return ImageEntity with metadata
+     * @throws IOException
+     */
     public ImageEntity createImage(MultipartFile file) throws IOException {
         ImageEntity created = null;
         long time = System.currentTimeMillis();
@@ -49,7 +56,8 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
             Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, time + file.getOriginalFilename()));
             created = imageRepository.save(new ImageEntity(time + file.getOriginalFilename()));
             // https://github.com/drewnoakes/metadata-extractor
-            metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()), created);
+            List<String> metadatalist = metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()));
+            created.setMetadatalist(metadatalist);
         }
         return created;
     }

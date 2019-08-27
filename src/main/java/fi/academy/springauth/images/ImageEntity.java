@@ -2,7 +2,6 @@ package fi.academy.springauth.images;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fi.academy.springauth.content.ContentEntity;
-import fi.academy.springauth.images.metadata.MetadataEntity;
 import fi.academy.springauth.photoShoot.PhotoshootPlanEntity;
 
 import javax.persistence.*;
@@ -22,13 +21,11 @@ public class ImageEntity {
 
     @ManyToOne
     @JoinColumn(name="photoshoot_plan_entity_id")
-    @JsonIgnoreProperties("referencePictures")
+    @JsonIgnoreProperties(value = {"referencePictures", "creator"})
     private PhotoshootPlanEntity photoshoot;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "image")
-    @JsonIgnoreProperties("image")
     @ElementCollection
-    private List<MetadataEntity> metadatalist = new ArrayList<>();
+    private List<String> metadatalist = new ArrayList<>();
 
 
     public ImageEntity(String url) {
@@ -39,14 +36,13 @@ public class ImageEntity {
     public ImageEntity() {
     }
 
-    public List<MetadataEntity> getMetadatalist() {
+    public List<String> getMetadatalist() {
         return metadatalist;
     }
 
-    public void setMetadatalist(List<MetadataEntity> metadatalist) {
+    public void setMetadatalist(List<String> metadatalist) {
         this.metadatalist = metadatalist;
     }
-
 
     public Long getId() {
         return id;
