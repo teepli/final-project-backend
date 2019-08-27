@@ -1,13 +1,10 @@
 package fi.academy.springauth.aws;
 
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import fi.academy.springauth.appUser.AppUserRepository;
 import fi.academy.springauth.images.ImageEntity;
 import fi.academy.springauth.images.ImageRepository;
 import fi.academy.springauth.images.metadata.MetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
@@ -19,8 +16,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -30,9 +25,6 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
 
     @Autowired
     private AmazonS3Client amazonS3Client;
-
-    @Value(value = "${UPLOAD_ROOT}")
-    private String UPLOAD_ROOT;
 
     private final ImageRepository imageRepository;
     private final ResourceLoader resourceLoader;
@@ -90,7 +82,12 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         }
     }
 
-    // TODO: Functionality to delete from S3-bucket
+    /**
+     * Deletes picture from DB and S3-bucket
+     * @param id Id of deletable image
+     * @param user Principal user to validation
+     * @return ResponseEntity.noContent if deleted, Bad request or not found on bad request
+     */
     public ResponseEntity<?> deleteImage(long id, Principal user) {
         Optional<ImageEntity> currentImage = Optional.ofNullable(imageRepository.findById(id));
 
@@ -99,7 +96,9 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
 
         }
         if (currentImage.get().getPhotoshoot().getCreator().getUsername().equals(user.getName())) {
-            imageRepository.delete(currentImage.get());
+            ImageEntity deleteImage = currentImage.get();
+            imageRepository.delete(deleteImage);
+            amazonS3Client.deleteFileFromS3Bucket(deleteImage.getUrl());
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);

@@ -9,7 +9,7 @@ import java.security.Principal;
 
 public interface ContentImageService {
 
-    ContentImageEntity createImage(MultipartFile file) throws IOException;
-    ResponseEntity<?> deleteImage(long id, Principal user);
+    ContentImageEntity createContentImage(MultipartFile file) throws IOException;
+    ResponseEntity<?> deleteContentImage(long id, Principal user);
 
 }

@@ -56,7 +56,7 @@ public class PhotoshootPlanService {
         if (appuser.get().getUsername().equals(user.getName())) {
             PhotoshootPlanEntity plan = new PhotoshootPlanEntity();
             plan.setHeader(header);
-//            plan.setDate(date);
+            plan.setDate(date);
             plan.setLocation(location);
             plan.setDescription(description);
             plan.setNotes(notes);

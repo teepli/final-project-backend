@@ -2,6 +2,8 @@ package fi.academy.springauth.images;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fi.academy.springauth.photoShoot.PhotoshootPlanEntity;
+import org.json.simple.JSONObject;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +23,8 @@ public class ImageEntity {
     @JsonIgnoreProperties(value = {"referencePictures", "creator"})
     private PhotoshootPlanEntity photoshoot;
 
-    @ElementCollection
-    private List<String> metadatalist = new ArrayList<>();
+//    @ElementCollection
+    private JSONObject metadatalist;
 
 
     public ImageEntity(String url) {
@@ -33,11 +35,11 @@ public class ImageEntity {
     public ImageEntity() {
     }
 
-    public List<String> getMetadatalist() {
+    public JSONObject getMetadatalist() {
         return metadatalist;
     }
 
-    public void setMetadatalist(List<String> metadatalist) {
+    public void setMetadatalist(JSONObject metadatalist) {
         this.metadatalist = metadatalist;
     }
 

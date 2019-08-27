@@ -50,10 +50,6 @@ public class ContentController {
     public ResponseEntity<?> addImage(@RequestBody MultipartFile image,
                                       @RequestParam String content,
                                       Principal principal) throws IOException {
-        System.out.println(content);
-        System.out.println(image);
-        System.out.println(principal.getName());
-        System.out.println(awsRekognitionService.detectUploadedLabelsResult(image));
 
         ContentImageEntity newImage = contentImageService.createImage(image);
         AppUserEntity creator = appUserRepository.findByUsername(principal.getName()).get();

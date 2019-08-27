@@ -3,6 +3,7 @@ package fi.academy.springauth.images;
 import fi.academy.springauth.appUser.AppUserRepository;
 import fi.academy.springauth.images.metadata.MetadataService;
 import fi.academy.springauth.photoShoot.PhotoshootPlanEntity;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -56,8 +57,9 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
             Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, time + file.getOriginalFilename()));
             created = imageRepository.save(new ImageEntity(time + file.getOriginalFilename()));
             // https://github.com/drewnoakes/metadata-extractor
-            List<String> metadatalist = metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()));
+            JSONObject metadatalist = metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()));
             created.setMetadatalist(metadatalist);
+
         }
         return created;
     }

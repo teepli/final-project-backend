@@ -2,6 +2,7 @@ package fi.academy.springauth.content;
 
 import com.amazonaws.services.rekognition.model.Label;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.json.simple.JSONObject;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.persistence.*;
@@ -21,8 +22,8 @@ public class ContentImageEntity  {
     @JsonIgnoreProperties("image")
     private ContentEntity content;
 
-    @ElementCollection
-    List<String> metadata;
+//    @ElementCollection
+    JSONObject metadata;
 
     @ElementCollection
     private List<Label> tags = new ArrayList<>();
@@ -36,11 +37,12 @@ public class ContentImageEntity  {
         this.url = url;
     }
 
-    public List<String> getMetadata() {
+
+    public JSONObject getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(List<String> metadata) {
+    public void setMetadata(JSONObject metadata) {
         this.metadata = metadata;
     }
 
@@ -75,4 +77,5 @@ public class ContentImageEntity  {
     public void setContent(ContentEntity content) {
         this.content = content;
     }
+
 }
