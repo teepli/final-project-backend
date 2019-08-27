@@ -3,11 +3,14 @@ package fi.academy.springauth.images;
 import fi.academy.springauth.appUser.AppUserRepository;
 import fi.academy.springauth.images.metadata.MetadataService;
 import fi.academy.springauth.photoShoot.PhotoshootPlanEntity;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,10 +21,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ImageService {
+@Profile("dev")
+public class ImageService implements fi.academy.springauth.utils.ImageService {
 
 
     @Value(value = "${UPLOAD_ROOT}")
@@ -38,6 +43,12 @@ public class ImageService {
         this.metadataService = metadataService;
     }
 
+    /**
+     * Creates new ImageEntity, reads metadata from picture and returns created object, used in local saving
+     * @param file Multipartfile to be saved
+     * @return ImageEntity with metadata
+     * @throws IOException
+     */
     public ImageEntity createImage(MultipartFile file) throws IOException {
         ImageEntity created = null;
         long time = System.currentTimeMillis();
@@ -46,10 +57,13 @@ public class ImageService {
             Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, time + file.getOriginalFilename()));
             created = imageRepository.save(new ImageEntity(time + file.getOriginalFilename()));
             // https://github.com/drewnoakes/metadata-extractor
-            metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()), created);
+            JSONObject metadatalist = metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()));
+            created.setMetadatalist(metadatalist);
+
         }
         return created;
     }
+
 
     public ResponseEntity<?> deleteImage(long id, Principal user) {
         Optional<ImageEntity> currentImage = Optional.ofNullable(imageRepository.findById(id));

@@ -8,7 +8,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 //import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
+import org.springframework.cloud.aws.autoconfigure.context.ContextCredentialsAutoConfiguration;
+import org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -40,4 +41,6 @@ public class SpringAuthApplication {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
+
 }

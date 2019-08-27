@@ -1,70 +1,87 @@
 package fi.academy.springauth.content;
 
+import com.amazonaws.services.rekognition.model.Label;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.images.ImageEntity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ContentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String content;
+    private String message;
 
-//    @OneToOne
-//    @JsonIgnoreProperties("content")
-//    private ImageEntity image;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "app_user_entity_id")
-//    @JsonIgnoreProperties("content")
-//    private AppUserEntity creator;
-//
-//    public ContentEntity(String content, ImageEntity image, AppUserEntity creator) {
-//        this.content = content;
-//        this.image = image;
-//        this.creator = creator;
-//    }
-//
-//    public ContentEntity(String content) {
-//        this.content = content;
-//    }
-//
-//    public ContentEntity() {
-//    }
-//
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(String content) {
-//        this.content = content;
-//    }
-//
-//    public ImageEntity getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(ImageEntity image) {
-//        this.image = image;
-//    }
-//
-//    public AppUserEntity getCreator() {
-//        return creator;
-//    }
-//
-//    public void setCreator(AppUserEntity creator) {
-//        this.creator = creator;
-//    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("content")
+    private ContentImageEntity image;
+
+    @ManyToOne
+    @JoinColumn(name = "app_user_entity_id")
+    @JsonIgnoreProperties(value = {"content", "plans"})
+    private AppUserEntity creator;
+
+    private boolean featured;
+
+    public ContentEntity() {
+    }
+
+    public ContentEntity(String message, ContentImageEntity image, AppUserEntity creator) {
+        this.message = message;
+        this.image = image;
+        this.creator = creator;
+    }
+
+    public ContentEntity(String message, ContentImageEntity image, AppUserEntity creator, boolean featured) {
+        this.message = message;
+        this.image = image;
+        this.creator = creator;
+        this.featured = featured;
+    }
+
+
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public ContentImageEntity getImage() {
+        return image;
+    }
+
+    public void setImage(ContentImageEntity image) {
+        this.image = image;
+    }
+
+    public AppUserEntity getCreator() {
+        return creator;
+    }
+
+    public void setCreator(AppUserEntity creator) {
+        this.creator = creator;
+    }
 }
