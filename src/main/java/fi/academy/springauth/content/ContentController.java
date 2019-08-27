@@ -51,7 +51,7 @@ public class ContentController {
                                       @RequestParam String content,
                                       Principal principal) throws IOException {
 
-        ContentImageEntity newImage = contentImageService.createImage(image);
+        ContentImageEntity newImage = contentImageService.createContentImage(image);
         AppUserEntity creator = appUserRepository.findByUsername(principal.getName()).get();
         boolean featured = System.currentTimeMillis() % 5 == 0 ? true : false;
         ContentEntity newContent = new ContentEntity(content, newImage, creator, featured);
@@ -69,5 +69,11 @@ public class ContentController {
                 .buildAndExpand(4)
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable long id, Principal user) {
+        System.out.println(user.getName());
+        return contentImageService.deleteContentImage(id, user);
     }
 }

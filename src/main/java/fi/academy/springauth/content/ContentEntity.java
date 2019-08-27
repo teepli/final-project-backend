@@ -16,7 +16,7 @@ public class ContentEntity {
     private Long id;
     private String message;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("content")
     private ContentImageEntity image;
 

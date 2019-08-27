@@ -28,13 +28,15 @@ public class LocalImageService implements fi.academy.springauth.utils.ContentIma
     private String UPLOAD_ROOT;
 
     @Autowired
+    private ContentRepository contentRepository;
+    @Autowired
     private ContentImageRepository contentImageRepository;
-
     @Autowired
     private MetadataService metadataService;
 
     /**
      * Creates new ContentImageEntity, reads metadata from picture and returns created object, used in local saving
+     *
      * @param file Multipartfile to be saved
      * @return ContentImageEntity with metadata
      * @throws IOException
@@ -70,16 +72,19 @@ public class LocalImageService implements fi.academy.springauth.utils.ContentIma
             e.printStackTrace();
         }
     }
+
     @Override
     public ResponseEntity<?> deleteContentImage(long id, Principal user) {
-        Optional<ContentImageEntity> currentImage = contentImageRepository.findById(id);
-
-        if (!currentImage.isPresent()){
+        Optional<ContentEntity> currentContent = contentRepository.findById(id);
+        System.out.println(id);
+        System.out.println(currentContent.get().getId());
+        if (!currentContent.isPresent()) {
             return new ResponseEntity<>("Error: there is no content with chosen id", HttpStatus.NOT_FOUND);
 
         }
-        if (currentImage.get().getContent().getCreator().getUsername().equals(user.getName())) {
-            contentImageRepository.delete(currentImage.get());
+        if (currentContent.get().getCreator().getUsername().equals(user.getName())) {
+            System.out.println(currentContent.get().getCreator().getUsername());
+            contentRepository.delete(currentContent.get());
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);

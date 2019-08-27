@@ -1,7 +1,6 @@
 package fi.academy.springauth.content;
 
 import fi.academy.springauth.aws.AmazonS3Client;
-import fi.academy.springauth.images.ImageEntity;
 import fi.academy.springauth.images.metadata.MetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -26,6 +25,8 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
     @Autowired
     ContentImageRepository contentImageRepository;
     @Autowired
+    ContentRepository contentRepository;
+    @Autowired
     MetadataService metadataService;
 
     // TODO: Functionality to save ContentImage to S3
@@ -45,16 +46,16 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
     // TODO: Functionality to delete ContentImage from S3
     @Override
     public ResponseEntity<?> deleteContentImage(long id, Principal user) {
-        Optional<ContentImageEntity> currentImage = contentImageRepository.findById(id);
+        Optional<ContentEntity> currentImage = contentRepository.findById(id);
 
         if (!currentImage.isPresent()){
             return new ResponseEntity<>("Error: there is no content with chosen id", HttpStatus.NOT_FOUND);
 
         }
-        if (currentImage.get().getContent().getCreator().getUsername().equals(user.getName())) {
-            ContentImageEntity deleteImage = currentImage.get();
-            contentImageRepository.delete(deleteImage);
-            amazonS3Client.deleteFileFromS3Bucket(deleteImage.getUrl());
+        if (currentImage.get().getCreator().getUsername().equals(user.getName())) {
+            ContentEntity deleteImage = currentImage.get();
+            contentRepository.delete(deleteImage);
+            amazonS3Client.deleteFileFromS3Bucket(deleteImage.getImage().getUrl());
             return ResponseEntity.noContent().build();
         }
         return new ResponseEntity<>("Not authorized", HttpStatus.BAD_REQUEST);
