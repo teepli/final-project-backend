@@ -11,6 +11,7 @@
     <groupId>fi.academy</groupId>
     <artifactId>Photoshoot-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+        <packaging>war</packaging>
     <name>Photoshoot-app</name>
     <description>Final project for Academy Finland bootcamp</description>
 
@@ -107,7 +108,11 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.2.3</version>
+        </dependency>
 
 
 

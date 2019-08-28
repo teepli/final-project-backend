@@ -29,7 +29,6 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
     @Autowired
     MetadataService metadataService;
 
-    // TODO: Functionality to save ContentImage to S3
     @Override
     public ContentImageEntity createContentImage(MultipartFile file) throws IOException {
         ContentImageEntity created = null;
@@ -43,7 +42,6 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
         return created;
     }
 
-    // TODO: Functionality to delete ContentImage from S3
     @Override
     public ResponseEntity<?> deleteContentImage(long id, Principal user) {
         Optional<ContentEntity> currentImage = contentRepository.findById(id);
@@ -62,7 +60,7 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
 
     }
 
-    private void readContentImageMetadata(MultipartFile multipartFile, ContentImageEntity created, String fileName) {
+    public void readContentImageMetadata(MultipartFile multipartFile, ContentImageEntity created, String fileName) {
 
         try {
             File file = new File(fileName);

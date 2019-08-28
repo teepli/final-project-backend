@@ -2,6 +2,8 @@ package fi.academy.springauth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -15,12 +17,16 @@ import java.util.Collections;
 
 //@EnableSwagger2
 @SpringBootApplication
-public class SpringAuthApplication {
+public class SpringAuthApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(SpringAuthApplication.class, args);
     }
 
+    @Override
+    public SpringApplicationBuilder configure(SpringApplicationBuilder app) {
+        return app.sources(SpringAuthApplication.class);
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

@@ -51,7 +51,6 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         if (!file.isEmpty()) {
             String newFile = amazonS3Client.uploadFileToS3Bucket(file, false);
             created = imageRepository.save(new ImageEntity(newFile));
-            // https://github.com/drewnoakes/metadata-extractor
             readMetadata(file, created, newFile);
         }
         return created;

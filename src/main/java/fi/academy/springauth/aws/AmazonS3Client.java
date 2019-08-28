@@ -54,7 +54,7 @@ public class AmazonS3Client {
      * @param enablePublicReadAccess boolean for emabling puvlic access
      * @return Name of the file, relative path
      */
-    @Async
+
     public String uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess) {
         String fileName = multipartFile.getOriginalFilename();
         long time = System.currentTimeMillis();
@@ -80,7 +80,7 @@ public class AmazonS3Client {
         return fileName;
     }
 
-    @Async
+
     public void deleteFileFromS3Bucket(String fileName) {
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(awsS3AudioBucket, fileName));
