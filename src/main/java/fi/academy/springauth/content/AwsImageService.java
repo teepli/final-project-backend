@@ -35,7 +35,7 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
         long time = System.currentTimeMillis();
 
         if (!file.isEmpty()) {
-            String newFile = amazonS3Client.uploadFileToS3Bucket(file, false);
+            String newFile = amazonS3Client.uploadFileToS3Bucket(file, true);
             created = contentImageRepository.save(new ContentImageEntity(newFile));
             readContentImageMetadata(file, created, created.getUrl());
         }
