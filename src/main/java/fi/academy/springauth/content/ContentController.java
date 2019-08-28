@@ -56,9 +56,9 @@ public class ContentController {
         boolean featured = System.currentTimeMillis() % 5 == 0 ? true : false;
         ContentEntity newContent = new ContentEntity(content, newImage, creator, featured);
 
-//        newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
+        newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
 
-        newImage.setTags(awsRekognitionService.detectS3ImageLabelsResults(newImage.getUrl()));
+//        newImage.setTags(awsRekognitionService.detectS3ImageLabelsResults(newImage.getUrl()));
         contentRepository.save(newContent);
         newImage.setContent(newContent);
         contentImageRepository.save(newImage);
