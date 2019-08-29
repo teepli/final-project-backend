@@ -57,7 +57,8 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
             Files.copy(file.getInputStream(), Paths.get(UPLOAD_ROOT, time + file.getOriginalFilename()));
             created = imageRepository.save(new ImageEntity(time + file.getOriginalFilename()));
             // https://github.com/drewnoakes/metadata-extractor
-            JSONObject metadatalist = metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()));
+//            JSONObject metadatalist = metadataService.metadataReader(new File(UPLOAD_ROOT + "\\" + created.getUrl()));
+            JSONObject metadatalist = metadataService.inputstremMetaReader(file.getInputStream());
             created.setMetadatalist(metadatalist);
 
         }

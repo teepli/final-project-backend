@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +28,36 @@ public class MetadataService {
      * @return List of metadata-strings
      */
     public JSONObject metadataReader(File image) {
+
         List<String> metadatalist = new ArrayList<>();
             JSONObject jo = new JSONObject();
+        try {
+
+            Metadata metadata = ImageMetadataReader.readMetadata(image);
+            for (Directory directory : metadata.getDirectories()) {
+                if (directory.getName().contains("Exif")) {
+                    for (Tag tag : directory.getTags()) {
+                        jo.put(tag.getTagName(), tag.getDescription());
+                        metadatalist.add(tag.getTagName() + " : " + tag.getDescription());
+                    }
+                }
+                for (String error : directory.getErrors()) {
+                    System.err.println("ERROR: " + error);
+                }
+            }
+        } catch (ImageProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return jo;
+    }
+
+    public JSONObject inputstremMetaReader(InputStream image) {
+
+        List<String> metadatalist = new ArrayList<>();
+        JSONObject jo = new JSONObject();
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(image);
             for (Directory directory : metadata.getDirectories()) {

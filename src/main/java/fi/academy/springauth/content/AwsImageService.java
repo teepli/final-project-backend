@@ -32,12 +32,12 @@ public class AwsImageService implements fi.academy.springauth.utils.ContentImage
     @Override
     public ContentImageEntity createContentImage(MultipartFile file) throws IOException {
         ContentImageEntity created = null;
-        long time = System.currentTimeMillis();
 
         if (!file.isEmpty()) {
-            String newFile = amazonS3Client.uploadFileToS3Bucket(file, true);
+            String newFile = amazonS3Client.uploadFileToS3Bucket(file, false);
             created = contentImageRepository.save(new ContentImageEntity(newFile));
-            readContentImageMetadata(file, created, created.getUrl());
+            created.setMetadata(metadataService.inputstremMetaReader(file.getInputStream()));
+//            readContentImageMetadata(file, created, created.getUrl());
         }
         return created;
     }
