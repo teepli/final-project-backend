@@ -4,11 +4,8 @@ package fi.academy.springauth.content;
 import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.appUser.AppUserRepository;
 import fi.academy.springauth.aws.AwsRekognitionService;
-import fi.academy.springauth.images.ImageEntity;
-import fi.academy.springauth.images.ImageRepository;
-
+import fi.academy.springauth.images.metadata.MetadataService;
 import fi.academy.springauth.utils.ContentImageService;
-import fi.academy.springauth.utils.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +37,9 @@ public class ContentController {
     @Autowired
     AwsRekognitionService awsRekognitionService;
 
+    @Autowired
+    MetadataService metadataService;
+
     @GetMapping("")
     public Iterable<ContentEntity> testContent() {
         return contentRepository.findAll();
@@ -56,7 +56,9 @@ public class ContentController {
         boolean featured = System.currentTimeMillis() % 5 == 0 ? true : false;
         ContentEntity newContent = new ContentEntity(content, newImage, creator, featured);
 
-//        newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
+        newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
+
+//        newImage.setTags(awsRekognitionService.detectS3ImageLabelsResults(newImage.getUrl()));
         contentRepository.save(newContent);
         newImage.setContent(newContent);
         contentImageRepository.save(newImage);
