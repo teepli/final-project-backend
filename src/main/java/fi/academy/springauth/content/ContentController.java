@@ -7,6 +7,9 @@ import fi.academy.springauth.aws.AwsRekognitionService;
 import fi.academy.springauth.images.metadata.MetadataService;
 import fi.academy.springauth.utils.ContentImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,8 +45,11 @@ public class ContentController {
     MetadataService metadataService;
 
     @GetMapping("")
-    public Iterable<ContentEntity> testContent() {
-        return contentRepository.findAll();
+    public Iterable<ContentEntity> testContent(@RequestParam int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("date").descending());
+//        return contentRepository.findAll();
+        return contentRepository.findAll(pageable);
+
     }
 
     @PostMapping("")
