@@ -46,7 +46,7 @@ public class ContentController {
 
     @GetMapping("")
     public Iterable<ContentEntity> testContent(@RequestParam int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("date").descending());
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("date").ascending());
 //        return contentRepository.findAll();
         return contentRepository.findAll(pageable);
 
