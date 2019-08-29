@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @RestController
@@ -55,7 +56,7 @@ public class ContentController {
         AppUserEntity creator = appUserRepository.findByUsername(principal.getName()).get();
         boolean featured = System.currentTimeMillis() % 5 == 0 ? true : false;
         ContentEntity newContent = new ContentEntity(content, newImage, creator, featured);
-
+        newContent.setDate(new Date());
         newImage.setTags(awsRekognitionService.detectUploadedLabelsResult(image));
 
 //        newImage.setTags(awsRekognitionService.detectS3ImageLabelsResults(newImage.getUrl()));

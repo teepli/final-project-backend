@@ -4,6 +4,7 @@ import fi.academy.springauth.appUser.AppUserRepository;
 import fi.academy.springauth.images.ImageEntity;
 import fi.academy.springauth.images.ImageRepository;
 import fi.academy.springauth.images.metadata.MetadataService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
@@ -51,7 +52,9 @@ public class ImageService implements fi.academy.springauth.utils.ImageService {
         if (!file.isEmpty()) {
             String newFile = amazonS3Client.uploadFileToS3Bucket(file, true);
             created = imageRepository.save(new ImageEntity(newFile));
-            readMetadata(file, created, newFile);
+            JSONObject metadatalist = metadataService.inputstremMetaReader(file.getInputStream());
+//            readMetadata(file, created, newFile);
+            created.setMetadatalist(metadatalist);
         }
         return created;
 

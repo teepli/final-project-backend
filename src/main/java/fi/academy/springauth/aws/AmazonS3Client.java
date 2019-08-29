@@ -6,11 +6,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 
-import com.amazonaws.services.s3.model.PutObjectResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +25,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 @Component
 @Configuration
@@ -54,13 +49,13 @@ public class AmazonS3Client {
      * @param enablePublicReadAccess boolean for emabling puvlic access
      * @return Name of the file, relative path
      */
-
+    @Async
     public String uploadFileToS3Bucket(MultipartFile multipartFile, boolean enablePublicReadAccess) {
         String fileName = multipartFile.getOriginalFilename();
         long time = System.currentTimeMillis();
         fileName = time + fileName;
         try {
-            File file = new File(fileName);
+            /*File file = new File(fileName);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(multipartFile.getBytes());
             fos.close();
@@ -71,8 +66,10 @@ public class AmazonS3Client {
                 putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
             }
             PutObjectResult a = this.amazonS3.putObject(putObjectRequest);
-            //removing the file created in the server
-            file.delete();
+            file.delete();*/
+            InputStream is = multipartFile.getInputStream();
+
+            this.amazonS3.putObject(new PutObjectRequest(this.awsS3AudioBucket, fileName, is, new ObjectMetadata()).withCannedAcl(CannedAccessControlList.PublicRead));
 
         } catch (IOException | AmazonServiceException ex) {
             logger.error("error [" + ex.getMessage() + "] occurred while uploading [" + fileName + "] ");
@@ -80,7 +77,7 @@ public class AmazonS3Client {
         return fileName;
     }
 
-
+    @Async
     public void deleteFileFromS3Bucket(String fileName) {
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(awsS3AudioBucket, fileName));

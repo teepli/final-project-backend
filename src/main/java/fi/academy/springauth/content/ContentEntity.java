@@ -6,7 +6,9 @@ import fi.academy.springauth.appUser.AppUserEntity;
 import fi.academy.springauth.images.ImageEntity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,6 +26,8 @@ public class ContentEntity {
     @JoinColumn(name = "app_user_entity_id")
     @JsonIgnoreProperties(value = {"content", "plans"})
     private AppUserEntity creator;
+
+    private Date date;
 
     private boolean featured;
 
@@ -43,7 +47,13 @@ public class ContentEntity {
         this.featured = featured;
     }
 
+    public Date getDate() {
+        return date;
+    }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public boolean isFeatured() {
         return featured;

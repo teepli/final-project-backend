@@ -125,8 +125,10 @@ public class PhotoshootPlanService {
        // Optional<AppUserEntity> currentUser = appUserRepository.findByUsername(user.getName());
         if (currentPlan.get().getCreator().getUsername().equals(user.getName())){
             AppUserEntity creator = currentPlan.get().getCreator();
+            List <ImageEntity> images = currentPlan.get().getReferencePictures();
             plan.setId(id);
             plan.setCreator(creator);
+            plan.setReferencePictures(images);
             photoshootPlanRepository.save(plan);
             return new ResponseEntity<>(plan, HttpStatus.OK);
         }
