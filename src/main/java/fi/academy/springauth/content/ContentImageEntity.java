@@ -18,7 +18,7 @@ public class ContentImageEntity  {
 
     private String url;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnoreProperties("image")
     private ContentEntity content;
 
