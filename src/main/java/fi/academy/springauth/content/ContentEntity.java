@@ -22,7 +22,7 @@ public class ContentEntity {
     @JsonIgnoreProperties("content")
     private ContentImageEntity image;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "app_user_entity_id")
     @JsonIgnoreProperties(value = {"content", "plans"})
     private AppUserEntity creator;
