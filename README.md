@@ -8,4 +8,5 @@ As a database we use PostgreSQL, having eight tables total.
 #### Security
 Authentication and authorization are done using JWT from Auth0.   
 
+Deployed: http://skp-suomenkuvapalvelu.s3-website-eu-west-1.amazonaws.com/
 Link to frontend:
